@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Projects.Data;
 using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
+using Steeltoe.Discovery.Client;
 using Steeltoe.Management.CloudFoundry;
 using Users.Data;
 
@@ -27,6 +28,7 @@ namespace RegistrationServer
             services.AddCloudFoundryActuators(Configuration);
 
             services.AddControllers();
+            services.AddDiscoveryClient(Configuration);
 
             services.AddScoped<IAccountDataGateway, AccountDataGateway>();
             services.AddDbContext<AccountContext>(options => options.UseMySql(Configuration));
@@ -47,7 +49,7 @@ namespace RegistrationServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseDiscoveryClient();
             app.UseCloudFoundryActuators();
 
             app.UseRouting();
